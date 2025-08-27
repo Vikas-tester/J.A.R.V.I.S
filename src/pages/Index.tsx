@@ -1,7 +1,4 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/hooks/useAuth';
-import { UserProfile } from '@/components/UserProfile';
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -21,8 +18,7 @@ import {
   Sparkles,
   Zap,
   Globe,
-  FileText,
-  Bot
+  FileText
 } from "lucide-react";
 import { toast } from "sonner";
 import aiHeroBg from "@/assets/ai-hero-bg.jpg";
@@ -73,30 +69,6 @@ const capabilities = [
 ];
 
 const Index = () => {
-  const { user, loading } = useAuth();
-  const navigate = useNavigate();
-
-  // Redirect to auth if not logged in
-  useEffect(() => {
-    if (!loading && !user) {
-      navigate('/auth');
-    }
-  }, [user, loading, navigate]);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-primary/5 flex items-center justify-center">
-        <div className="flex items-center space-x-2">
-          <Bot className="h-8 w-8 text-primary animate-pulse" />
-          <span className="text-lg text-foreground">Loading J.A.R.V.I.S...</span>
-        </div>
-      </div>
-    );
-  }
-
-  if (!user) {
-    return null; // Will redirect via useEffect
-  }
   const [activeCapability, setActiveCapability] = useState("chat");
   const [isConnected, setIsConnected] = useState(false);
 
@@ -113,22 +85,6 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-bg">
-      {/* Header */}
-      <header className="flex items-center justify-between p-6 border-b border-border/20">
-        <div className="flex items-center space-x-3">
-          <Bot className="h-8 w-8 text-primary" />
-          <div>
-            <h1 className="text-2xl font-bold text-foreground">J.A.R.V.I.S</h1>
-            <p className="text-sm text-muted-foreground">Your AI Personal Assistant</p>
-          </div>
-        </div>
-        <div className="flex items-center space-x-4">
-          <div className="h-3 w-3 bg-green-500 rounded-full animate-pulse"></div>
-          <span className="text-sm text-muted-foreground">System Online</span>
-          <UserProfile />
-        </div>
-      </header>
-
       {/* Hero Section */}
       <div className="relative overflow-hidden">
         <div 
