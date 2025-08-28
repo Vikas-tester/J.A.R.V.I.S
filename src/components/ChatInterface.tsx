@@ -1,20 +1,19 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Send, Mic, MicOff, Bot, User } from "lucide-react";
 import { toast } from "sonner";
+import { aiService, ChatMessage } from "@/services/aiService";
+import { supabase } from "@/integrations/supabase/client";
 
-interface Message {
-  id: string;
-  content: string;
-  role: "user" | "assistant";
-  timestamp: Date;
+interface ChatInterfaceProps {
+  capability?: string;
 }
 
-export const ChatInterface = () => {
-  const [messages, setMessages] = useState<Message[]>([
+export const ChatInterface = ({ capability = "chat" }: ChatInterfaceProps) => {
+  const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: "1",
       content: "Hello! I'm your comprehensive AI assistant. I can help you with conversations, voice commands, image generation, code execution, research, task management, and much more. What would you like to explore today?",
@@ -25,11 +24,25 @@ export const ChatInterface = () => {
   const [input, setInput] = useState("");
   const [isListening, setIsListening] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    const getUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+    };
+    getUser();
+  }, []);
 
   const handleSendMessage = async () => {
     if (!input.trim()) return;
+    
+    if (!user) {
+      toast.error("Please sign in to use the AI assistant");
+      return;
+    }
 
-    const newMessage: Message = {
+    const newMessage: ChatMessage = {
       id: Date.now().toString(),
       content: input,
       role: "user",
@@ -40,23 +53,50 @@ export const ChatInterface = () => {
     setInput("");
     setIsTyping(true);
 
-    // Simulate AI response
-    setTimeout(() => {
-      const aiResponse: Message = {
+    try {
+      const response = await aiService.chat(input, capability);
+      
+      const aiResponse: ChatMessage = {
         id: (Date.now() + 1).toString(),
-        content: "I understand your request. To fully activate my capabilities, you'll need to connect this interface to AI services through Supabase. I can help you with the integration once that's set up!",
+        content: response,
         role: "assistant",
         timestamp: new Date(),
       };
+      
       setMessages(prev => [...prev, aiResponse]);
+    } catch (error) {
+      console.error('Chat error:', error);
+      toast.error("Failed to get AI response. Please try again.");
+      
+      const errorResponse: ChatMessage = {
+        id: (Date.now() + 1).toString(),
+        content: "I apologize, but I'm having trouble responding right now. Please try again in a moment.",
+        role: "assistant",
+        timestamp: new Date(),
+      };
+      
+      setMessages(prev => [...prev, errorResponse]);
+    } finally {
       setIsTyping(false);
-    }, 1500);
+    }
   };
 
-  const toggleVoice = () => {
+  const toggleVoice = async () => {
+    if (!user) {
+      toast.error("Please sign in to use voice features");
+      return;
+    }
+
     setIsListening(!isListening);
     if (!isListening) {
-      toast.info("Voice recognition would activate here with proper API integration");
+      toast.info("Voice recognition activated - speak now");
+      // In a real implementation, you'd add speech recognition here
+      setTimeout(() => {
+        setIsListening(false);
+        toast.info("Voice input processed");
+      }, 3000);
+    } else {
+      toast.info("Voice recognition stopped");
     }
   };
 

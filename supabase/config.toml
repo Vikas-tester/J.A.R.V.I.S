@@ -1,1 +1,16 @@
 project_id = "anbmihxzbhkizcynrgvs"
+
+[functions.chat]
+verify_jwt = true
+
+[functions.voice-synthesis]
+verify_jwt = true
+
+[functions.image-generation]
+verify_jwt = true
+
+[functions.code-generation]
+verify_jwt = true
+
+[functions.web-research]
+verify_jwt = true

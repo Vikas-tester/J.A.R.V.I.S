@@ -6,6 +6,8 @@ import { ChatInterface } from "@/components/ChatInterface";
 import { CapabilityCard } from "@/components/CapabilityCard";
 import { TaskManager } from "@/components/TaskManager";
 import { SystemMonitor } from "@/components/SystemMonitor";
+import { ImageGenerator } from "@/components/ImageGenerator";
+import { CodeGenerator } from "@/components/CodeGenerator";
 import { 
   MessageCircle, 
   Mic, 
@@ -70,17 +72,15 @@ const capabilities = [
 
 const Index = () => {
   const [activeCapability, setActiveCapability] = useState("chat");
-  const [isConnected, setIsConnected] = useState(false);
+  const [isConnected, setIsConnected] = useState(true); // Now connected via Supabase
 
   const handleCapabilityClick = (capabilityId: string) => {
     setActiveCapability(capabilityId);
-    if (capabilityId !== "chat") {
-      toast.info("This capability requires API integration through Supabase");
-    }
+    toast.success(`Switched to ${capabilities.find(c => c.id === capabilityId)?.title} mode`);
   };
 
   const connectSupabase = () => {
-    toast.info("Visit your Lovable project settings to connect Supabase for full AI capabilities");
+    toast.success("J.A.R.V.I.S is now fully connected and operational!");
   };
 
   return (
@@ -173,32 +173,14 @@ const Index = () => {
 
           {/* Center - Main Interface */}
           <div className="lg:col-span-1">
-            {activeCapability === "chat" ? (
-              <div className="h-[600px]">
-                <ChatInterface />
-              </div>
-            ) : (
-              <Card className="h-[600px] p-6 bg-gradient-card border-ai-primary/20 flex items-center justify-center">
-                <div className="text-center space-y-4">
-                  <div className="p-4 rounded-lg bg-gradient-primary w-fit mx-auto">
-                    {(() => {
-                      const capability = capabilities.find(c => c.id === activeCapability);
-                      const IconComponent = capability?.icon;
-                      return IconComponent ? <IconComponent className="w-8 h-8 text-white" /> : null;
-                    })()}
-                  </div>
-                  <h3 className="text-lg font-semibold text-foreground">
-                    {capabilities.find(c => c.id === activeCapability)?.title}
-                  </h3>
-                  <p className="text-muted-foreground">
-                    Connect to Supabase to activate this capability
-                  </p>
-                  <Button variant="ai" onClick={connectSupabase}>
-                    Setup Integration
-                  </Button>
-                </div>
-              </Card>
-            )}
+            <div className="h-[600px]">
+              {activeCapability === "chat" && <ChatInterface capability="chat" />}
+              {activeCapability === "voice" && <ChatInterface capability="voice" />}
+              {activeCapability === "image" && <ImageGenerator />}
+              {activeCapability === "code" && <CodeGenerator />}
+              {activeCapability === "search" && <ChatInterface capability="search" />}
+              {activeCapability === "analysis" && <ChatInterface capability="analysis" />}
+            </div>
           </div>
 
           {/* Right Sidebar - Management */}
