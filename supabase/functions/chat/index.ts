@@ -1,3 +1,4 @@
+import "https://deno.land/x/xhr@0.1.0/mod.ts"
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import OpenAI from 'https://esm.sh/openai@4.20.1'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.56.0'
@@ -45,9 +46,9 @@ serve(async (req) => {
       apiKey: Deno.env.get('OPENAI_API_KEY'),
     })
 
-    // Create chat completion
+    // Create chat completion with latest GPT model
     const completion = await openai.chat.completions.create({
-      model: 'gpt-4',
+      model: 'gpt-5-2025-08-07',
       messages: [
         {
           role: 'system',
@@ -58,8 +59,7 @@ serve(async (req) => {
           content: message
         }
       ],
-      temperature: 0.7,
-      max_tokens: 1000,
+      max_completion_tokens: 1000,
     })
 
     const response = completion.choices[0]?.message?.content || 'I apologize, but I could not generate a response.'

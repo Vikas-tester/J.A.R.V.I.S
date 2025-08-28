@@ -8,6 +8,8 @@ import { TaskManager } from "@/components/TaskManager";
 import { SystemMonitor } from "@/components/SystemMonitor";
 import { ImageGenerator } from "@/components/ImageGenerator";
 import { CodeGenerator } from "@/components/CodeGenerator";
+import { UserProfile } from "@/components/UserProfile";
+import { useAuth } from "@/hooks/useAuth";
 import { 
   MessageCircle, 
   Mic, 
@@ -73,6 +75,7 @@ const capabilities = [
 const Index = () => {
   const [activeCapability, setActiveCapability] = useState("chat");
   const [isConnected, setIsConnected] = useState(true); // Now connected via Supabase
+  const { user } = useAuth();
 
   const handleCapabilityClick = (capabilityId: string) => {
     setActiveCapability(capabilityId);
@@ -112,27 +115,44 @@ const Index = () => {
             </p>
             
             <div className="flex items-center justify-center gap-4">
-              <Button 
-                variant="ai" 
-                size="lg" 
-                onClick={connectSupabase}
-                className="animate-pulse-glow"
-              >
-                <Zap className="w-5 h-5 mr-2" />
-                Connect AI Services
-              </Button>
-              <Button variant="ai-outline" size="lg">
-                <Globe className="w-5 h-5 mr-2" />
-                View Documentation
-              </Button>
+              {user ? (
+                <>
+                  <Button 
+                    variant="ai" 
+                    size="lg" 
+                    onClick={connectSupabase}
+                    className="animate-pulse-glow"
+                  >
+                    <Zap className="w-5 h-5 mr-2" />
+                    All Systems Operational
+                  </Button>
+                  <Button variant="ai-outline" size="lg">
+                    <Globe className="w-5 h-5 mr-2" />
+                    View Documentation
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button variant="ai" size="lg" asChild>
+                    <a href="/auth">
+                      <Zap className="w-5 h-5 mr-2" />
+                      Sign In to Access AI
+                    </a>
+                  </Button>
+                  <Button variant="ai-outline" size="lg">
+                    <Globe className="w-5 h-5 mr-2" />
+                    View Documentation
+                  </Button>
+                </>
+              )}
             </div>
 
             {/* Status Indicators */}
             <div className="flex items-center justify-center gap-6 pt-6">
               <div className="flex items-center gap-2">
-                <div className={`w-2 h-2 rounded-full ${isConnected ? "bg-green-500" : "bg-yellow-500"} animate-pulse`} />
+                <div className={`w-2 h-2 rounded-full ${user ? "bg-green-500" : "bg-yellow-500"} animate-pulse`} />
                 <span className="text-sm text-muted-foreground">
-                  {isConnected ? "AI Connected" : "Setup Required"}
+                  {user ? "AI Connected" : "Sign In Required"}
                 </span>
               </div>
               <Badge variant="outline" className="border-ai-primary/30 text-ai-primary">
@@ -185,6 +205,7 @@ const Index = () => {
 
           {/* Right Sidebar - Management */}
           <div className="space-y-6">
+            <UserProfile />
             <TaskManager />
             <SystemMonitor />
           </div>

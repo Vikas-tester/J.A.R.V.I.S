@@ -53,6 +53,19 @@ export const aiService = {
     return data.audioUrl;
   },
 
+  async transcribeVoice(audioBlob: Blob): Promise<string> {
+    // Convert blob to base64
+    const arrayBuffer = await audioBlob.arrayBuffer();
+    const base64Audio = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
+    
+    const { data, error } = await supabase.functions.invoke('voice-transcription', {
+      body: { audio: base64Audio }
+    });
+
+    if (error) throw new Error(error.message);
+    return data.text;
+  },
+
   async webResearch(query: string, searchType?: string): Promise<{
     summary: string;
     results: any[];
