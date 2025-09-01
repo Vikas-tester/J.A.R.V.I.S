@@ -58,9 +58,14 @@ export default {
 					primary: 'hsl(var(--ai-primary))',
 					secondary: 'hsl(var(--ai-secondary))',
 					accent: 'hsl(var(--ai-accent))',
+					warning: 'hsl(var(--ai-warning))',
+					success: 'hsl(var(--ai-success))',
 					card: 'hsl(var(--ai-card))',
 					'card-hover': 'hsl(var(--ai-card-hover))',
-					glow: 'hsl(var(--ai-glow))'
+					glow: 'hsl(var(--ai-glow))',
+					matrix: 'hsl(var(--ai-matrix))',
+					'bg-start': 'hsl(var(--ai-bg-start))',
+					'bg-end': 'hsl(var(--ai-bg-end))'
 				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
@@ -123,8 +128,23 @@ export default {
 			},
 			backgroundImage: {
 				'gradient-primary': 'var(--gradient-primary)',
+				'gradient-secondary': 'var(--gradient-secondary)',
+				'gradient-accent': 'var(--gradient-accent)',
+				'gradient-warning': 'var(--gradient-warning)',
 				'gradient-bg': 'var(--gradient-bg)',
-				'gradient-card': 'var(--gradient-card)'
+				'gradient-card': 'var(--gradient-card)',
+				'gradient-matrix': 'var(--gradient-matrix)'
+			},
+			boxShadow: {
+				'glow-primary': 'var(--glow-primary)',
+				'glow-secondary': 'var(--glow-secondary)',
+				'glow-accent': 'var(--glow-accent)',
+				'ai': 'var(--shadow-ai)',
+				'ai-hover': 'var(--shadow-hover)'
+			},
+			fontFamily: {
+				'mono': ['JetBrains Mono', 'Fira Code', 'monospace'],
+				'tech': ['Orbitron', 'Inter', 'sans-serif']
 			}
 		}
 	},

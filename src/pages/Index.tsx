@@ -9,6 +9,8 @@ import { SystemMonitor } from "@/components/SystemMonitor";
 import { ImageGenerator } from "@/components/ImageGenerator";
 import { CodeGenerator } from "@/components/CodeGenerator";
 import { UserProfile } from "@/components/UserProfile";
+import { JarvisHeader } from "@/components/JarvisHeader";
+import { JarvisMatrix } from "@/components/JarvisMatrix";
 import { useAuth } from "@/hooks/useAuth";
 import { 
   MessageCircle, 
@@ -22,7 +24,10 @@ import {
   Sparkles,
   Zap,
   Globe,
-  FileText
+  FileText,
+  Cpu,
+  Network,
+  User
 } from "lucide-react";
 import { toast } from "sonner";
 import aiHeroBg from "@/assets/ai-hero-bg.jpg";
@@ -87,94 +92,127 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-bg">
+    <div className="min-h-screen bg-gradient-bg relative">
+      {/* Matrix Background Effect */}
+      <JarvisMatrix />
+      
+      {/* JARVIS Header */}
+      <JarvisHeader />
+
       {/* Hero Section */}
       <div className="relative overflow-hidden">
         <div 
-          className="absolute inset-0 opacity-20"
+          className="absolute inset-0 opacity-10"
           style={{
             backgroundImage: `url(${aiHeroBg})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
           }}
         />
-        <div className="relative z-10 container mx-auto px-4 py-12">
-          <div className="text-center space-y-6">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-ai-card border border-ai-primary/20">
-              <Sparkles className="w-4 h-4 text-ai-primary" />
-              <span className="text-sm font-medium text-foreground">Comprehensive AI Assistant</span>
+        
+        {/* Circuit Board Background */}
+        <div className="absolute inset-0 matrix-bg opacity-20" />
+        
+        <div className="relative z-10 container mx-auto px-6 py-16">
+          <div className="text-center space-y-8">
+            {/* Status Badge */}
+            <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full jarvis-panel animate-hover-float">
+              <div className="w-2 h-2 bg-ai-success rounded-full animate-pulse" />
+              <Cpu className="w-4 h-4 text-ai-primary animate-circuit-flow" />
+              <span className="text-sm font-tech text-foreground">ARTIFICIAL INTELLIGENCE SYSTEM</span>
+              <Network className="w-4 h-4 text-ai-accent animate-circuit-flow" />
             </div>
             
-            <h1 className="text-4xl md:text-6xl font-bold text-foreground">
-              Omni Mind Bot
-            </h1>
+            <div className="space-y-4">
+              <h1 className="text-5xl md:text-7xl font-bold text-glow-primary font-tech tracking-wider">
+                J.A.R.V.I.S
+              </h1>
+              <p className="text-lg text-glow-accent font-tech">
+                Just A Rather Very Intelligent System
+              </p>
+            </div>
             
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Your intelligent companion for conversations, creativity, coding, research, and task management. 
-              Powered by advanced AI models with multi-modal capabilities.
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+              Advanced artificial intelligence with multi-modal capabilities. 
+              Conversational AI, code generation, image synthesis, voice processing, and real-time analysis.
             </p>
             
-            <div className="flex items-center justify-center gap-4">
+            <div className="flex items-center justify-center gap-6 flex-wrap">
               {user ? (
                 <>
                   <Button 
                     variant="ai" 
                     size="lg" 
                     onClick={connectSupabase}
-                    className="animate-pulse-glow"
+                    className="font-tech text-base"
                   >
                     <Zap className="w-5 h-5 mr-2" />
-                    All Systems Operational
+                    ALL SYSTEMS OPERATIONAL
                   </Button>
-                  <Button variant="ai-outline" size="lg">
+                  <Button variant="ai-outline" size="lg" className="font-tech">
                     <Globe className="w-5 h-5 mr-2" />
-                    View Documentation
+                    SYSTEM DOCS
                   </Button>
                 </>
               ) : (
                 <>
-                  <Button variant="ai" size="lg" asChild>
+                  <Button variant="ai" size="lg" asChild className="font-tech text-base">
                     <a href="/auth">
                       <Zap className="w-5 h-5 mr-2" />
-                      Sign In to Access AI
+                      INITIALIZE SYSTEM
                     </a>
                   </Button>
-                  <Button variant="ai-outline" size="lg">
+                  <Button variant="ai-outline" size="lg" className="font-tech">
                     <Globe className="w-5 h-5 mr-2" />
-                    View Documentation
+                    DOCUMENTATION
                   </Button>
                 </>
               )}
             </div>
 
-            {/* Status Indicators */}
-            <div className="flex items-center justify-center gap-6 pt-6">
-              <div className="flex items-center gap-2">
-                <div className={`w-2 h-2 rounded-full ${user ? "bg-green-500" : "bg-yellow-500"} animate-pulse`} />
-                <span className="text-sm text-muted-foreground">
-                  {user ? "AI Connected" : "Sign In Required"}
-                </span>
+            {/* Enhanced Status Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-8 max-w-2xl mx-auto">
+              <div className="jarvis-panel p-4 text-center">
+                <div className={`w-3 h-3 rounded-full mx-auto mb-2 ${user ? "bg-ai-success" : "bg-ai-warning"} animate-pulse`} />
+                <div className="text-xs font-tech text-muted-foreground">AI STATUS</div>
+                <div className="text-sm font-tech text-ai-primary">{user ? "ONLINE" : "STANDBY"}</div>
               </div>
-              <Badge variant="outline" className="border-ai-primary/30 text-ai-primary">
-                <Brain className="w-3 h-3 mr-1" />
-                Advanced AI
-              </Badge>
-              <Badge variant="outline" className="border-ai-primary/30 text-ai-primary">
-                <Shield className="w-3 h-3 mr-1" />
-                Secure
-              </Badge>
+              
+              <div className="jarvis-panel p-4 text-center">
+                <Brain className="w-4 h-4 mx-auto mb-2 text-ai-primary animate-circuit-flow" />
+                <div className="text-xs font-tech text-muted-foreground">NEURAL NET</div>
+                <div className="text-sm font-tech text-ai-accent">GPT-5</div>
+              </div>
+              
+              <div className="jarvis-panel p-4 text-center">
+                <Shield className="w-4 h-4 mx-auto mb-2 text-ai-success" />
+                <div className="text-xs font-tech text-muted-foreground">SECURITY</div>
+                <div className="text-sm font-tech text-ai-success">SECURE</div>
+              </div>
+              
+              <div className="jarvis-panel p-4 text-center">
+                <Network className="w-4 h-4 mx-auto mb-2 text-ai-primary animate-pulse" />
+                <div className="text-xs font-tech text-muted-foreground">NETWORK</div>
+                <div className="text-sm font-tech text-ai-primary">CONNECTED</div>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
       {/* Main Dashboard */}
-      <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left Sidebar - Capabilities */}
+      <div className="container mx-auto px-6 py-12 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Left Sidebar - AI Capabilities */}
           <div className="space-y-6">
-            <Card className="p-6 bg-gradient-card border-ai-primary/20">
-              <h2 className="text-xl font-semibold text-foreground mb-4">AI Capabilities</h2>
+            <div className="jarvis-panel p-6">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
+                  <Brain className="w-4 h-4 text-ai-bg-start" />
+                </div>
+                <h2 className="text-xl font-tech text-glow-primary">AI MODULES</h2>
+              </div>
+              
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
                 {capabilities.map((capability) => (
                   <CapabilityCard
@@ -188,35 +226,114 @@ const Index = () => {
                   />
                 ))}
               </div>
-            </Card>
+            </div>
           </div>
 
           {/* Center - Main Interface */}
           <div className="lg:col-span-1">
-            <div className="h-[600px]">
-              {activeCapability === "chat" && <ChatInterface capability="chat" />}
-              {activeCapability === "voice" && <ChatInterface capability="voice" />}
-              {activeCapability === "image" && <ImageGenerator />}
-              {activeCapability === "code" && <CodeGenerator />}
-              {activeCapability === "search" && <ChatInterface capability="search" />}
-              {activeCapability === "analysis" && <ChatInterface capability="analysis" />}
+            <div className="jarvis-panel h-[700px] p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-6 h-6 bg-gradient-accent rounded flex items-center justify-center">
+                  <Zap className="w-3 h-3 text-ai-bg-start" />
+                </div>
+                <h3 className="font-tech text-glow-accent">
+                  {capabilities.find(c => c.id === activeCapability)?.title.toUpperCase() || "MAIN TERMINAL"}
+                </h3>
+                <div className="ml-auto flex items-center gap-2">
+                  <div className="w-2 h-2 bg-ai-success rounded-full animate-pulse" />
+                  <span className="text-xs font-tech text-ai-success">ACTIVE</span>
+                </div>
+              </div>
+              
+              <div className="h-[calc(100%-3rem)] bg-ai-bg-start/50 rounded-lg border border-ai-primary/20 overflow-hidden">
+                {activeCapability === "chat" && <ChatInterface capability="chat" />}
+                {activeCapability === "voice" && <ChatInterface capability="voice" />}
+                {activeCapability === "image" && <ImageGenerator />}
+                {activeCapability === "code" && <CodeGenerator />}
+                {activeCapability === "search" && <ChatInterface capability="search" />}
+                {activeCapability === "analysis" && <ChatInterface capability="analysis" />}
+              </div>
             </div>
           </div>
 
-          {/* Right Sidebar - Management */}
+          {/* Right Sidebar - System Management */}
           <div className="space-y-6">
-            <UserProfile />
-            <TaskManager />
-            <SystemMonitor />
+            <div className="jarvis-panel p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-6 h-6 bg-gradient-secondary rounded flex items-center justify-center">
+                  <User className="w-3 h-3 text-ai-bg-start" />
+                </div>
+                <h3 className="font-tech text-glow-primary">USER PROFILE</h3>
+              </div>
+              <UserProfile />
+            </div>
+            
+            <div className="jarvis-panel p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-6 h-6 bg-gradient-warning rounded flex items-center justify-center">
+                  <CheckSquare className="w-3 h-3 text-ai-bg-start" />
+                </div>
+                <h3 className="font-tech text-glow-accent">TASK MANAGER</h3>
+              </div>
+              <TaskManager />
+            </div>
+            
+            <div className="jarvis-panel p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-6 h-6 bg-gradient-accent rounded flex items-center justify-center">
+                  <Shield className="w-3 h-3 text-ai-bg-start" />
+                </div>
+                <h3 className="font-tech text-glow-primary">SYSTEM MONITOR</h3>
+              </div>
+              <SystemMonitor />
+            </div>
           </div>
         </div>
       </div>
 
       {/* Footer */}
-      <footer className="border-t border-ai-primary/20 py-8 mt-16">
-        <div className="container mx-auto px-4 text-center text-muted-foreground">
-          <p>Omni Mind Bot - Your Comprehensive AI Assistant</p>
-          <p className="text-sm mt-2">Built with React, TypeScript, and Advanced AI</p>
+      <footer className="relative border-t border-ai-primary/20 py-12 mt-16 bg-gradient-card">
+        <div className="absolute inset-0 matrix-bg opacity-10" />
+        <div className="relative z-10 container mx-auto px-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
+            <div>
+              <div className="flex items-center justify-center md:justify-start gap-2 mb-4">
+                <div className="w-8 h-8 bg-gradient-primary rounded-full flex items-center justify-center">
+                  <Brain className="w-4 h-4 text-ai-bg-start" />
+                </div>
+                <span className="font-tech text-glow-primary text-lg">J.A.R.V.I.S</span>
+              </div>
+              <p className="text-muted-foreground text-sm">
+                Advanced AI System for comprehensive digital assistance
+              </p>
+            </div>
+            
+            <div>
+              <h4 className="font-tech text-ai-primary mb-4">CAPABILITIES</h4>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li>Neural Language Processing</li>
+                <li>Computer Vision & Image Generation</li>
+                <li>Code Analysis & Synthesis</li>
+                <li>Real-time Web Research</li>
+              </ul>
+            </div>
+            
+            <div>
+              <h4 className="font-tech text-ai-primary mb-4">SYSTEM INFO</h4>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li>Built with React & TypeScript</li>
+                <li>Powered by GPT-5 Neural Network</li>
+                <li>Secure Supabase Backend</li>
+                <li>Real-time Processing</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div className="border-t border-ai-primary/20 mt-8 pt-8 text-center">
+            <p className="text-muted-foreground text-sm font-tech">
+              © 2025 J.A.R.V.I.S • ARTIFICIAL INTELLIGENCE SYSTEM • ALL RIGHTS RESERVED
+            </p>
+          </div>
         </div>
       </footer>
     </div>
